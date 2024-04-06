@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>index 服装数据分析系统</title>
+<link rel="stylesheet" href="../../../static/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+<link rel="stylesheet" href="../../../static/vendors/css/vendor.bundle.base.css">
+<link rel="stylesheet" href="../../../static/css/style.css">
+<link rel="shortcut icon" href="../../../static/images/favicon.png" />
+</head>
+<body>
+  <div class="container-scroller">
+    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <img src="../../../static/images/login.jpg" alt="logo" style="width: 90%;"/>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-stretch">
+        <div class="search-field d-none d-md-block">
+          <form class="d-flex align-items-center h-100" action="#">
+            <div class="input-group">
+              <div class="input-group-prepend bg-transparent">
+                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div>
+              <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+            </div>
+          </form>
+        </div>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+              <div class="nav-profile-img">
+                <img src="../../../static/images/faces/face1.jpg" alt="image">
+                <span class="availability-status online"></span>
+              </div>
+              <div class="nav-profile-text">
+				  {% block name_1 %}
+				  {% endblock %}
+                
+              </div>
+            </a>
+            <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="#">
+                <i class="mdi mdi-cached mr-2 text-success"></i>
+                Activity Log
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/user/logOut">
+                <i class="mdi mdi-logout mr-2 text-primary"></i>
+                Signout
+              </a>
+            </div>
+          </li>
+         
+        
+          <li class="nav-item nav-settings d-none d-lg-block">
+            <a class="nav-link" href="#">
+              <i class="mdi mdi-format-line-spacing"></i>
+            </a>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item nav-profile">
+              <div class="nav-profile-image">
+                <img src="../../../static/images/faces/face1.jpg" alt="profile" style="width: 50px;height: 50px;">
+                {% block name_2 %}
+                
+                {% endblock %}
+				
+              </div>
+
+          </li>
+		  
+          <li class="nav-item">
+            <a class="nav-link" href="/page/home">
+              <span class="menu-title">首页</span>
+			  
+              <i class="mdi mdi-home menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <span class="menu-title">服装信息列表</span>
+			  <i class="menu-arrow"></i>
+              <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/page/search">全部服装</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/page/search/type">搜索服装</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item"> 
+            <a class="nav-link" href="/page/comment">
+              <span class="menu-title">评论分析</span>
+              <i class="mdi mdi-contacts menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+			  <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="ui-basic">
+			    <span class="menu-title">情感分析</span>
+			    <i class="menu-arrow"></i>
+			    <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+			  </a>
+			  <div class="collapse" id="general-pages">
+			    <ul class="nav flex-column sub-menu">
+			      <li class="nav-item"> <a class="nav-link" href="/page/qinggan">全部服装情感分析</a></li>
+			      <li class="nav-item"> <a class="nav-link" href="/page/qinggan/search">分类服装情感分析</a></li>
+			    </ul>
+			  </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#shop-pages" aria-expanded="false" aria-controls="ui-basic">
+              <span class="menu-title">店铺分析</span>
+			  <i class="menu-arrow"></i>
+              <i class="mdi mdi-chart-bar menu-icon"></i>
+            </a>
+			<div class="collapse" id="shop-pages">
+			  <ul class="nav flex-column sub-menu">
+			    <li class="nav-item"> <a class="nav-link" href="/page/shop">店铺信息</a></li>
+			    <li class="nav-item"> <a class="nav-link" href="/page/shop/views">店铺可视化分析</a></li>
+			  </ul>
+			</div>
+			
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/page/other">
+              <span class="menu-title">其他分析</span>
+              <i class="mdi mdi-table-large menu-icon"></i>
+            </a>
+          </li>
+
+          
+        </ul>
+      </nav>
+	  <div class="main-panel">
+		  
+	  {% block content %}
+	  {% endblock %}
+	  <footer class="footer">
+	    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+	      <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">服装数据分析系统</span>
+	    </div>
+	  </footer>
+	
+	</div>
+    </div>
+  </div>
+
+  <script src="../../../static/vendors/js/vendor.bundle.base.js"></script>
+  <script src="../../../static/vendors/js/vendor.bundle.addons.js"></script>
+  <script src="../../../static/js/off-canvas.js"></script>
+  <script src="../../../static/js/misc.js"></script>
+  <script src="../../../static/js/dashboard.js"></script>
+  <script src="../../../static/js/echarts.js"></script>
+  <script src="../../../static/js/china.js"></script>
+  {% block js %}
+  {% endblock %}
+</body>
+
+</html>

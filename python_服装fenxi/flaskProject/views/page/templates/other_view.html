@@ -1,0 +1,174 @@
+{% extends 'layout.html' %}
+
+{% block name_1 %}
+	<p class="mb-1 text-black">{{ username }}</p>
+{% endblock %}
+
+{% block name_2 %}
+    <span class="font-weight-bold mb-4">{{ username }}</span>       
+{% endblock %}
+
+{% block content %}
+	
+      <div class="content-wrapper">
+        <div class="page-header">
+          <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white mr-2">
+              <i class="mdi mdi-home"></i>                 
+            </span>
+            其他的数据展示
+          </h3>
+		  </div>
+		  
+		  <div class="row">
+			  
+		    <div class="col-8 grid-margin">
+		      <div class="card">
+		       <div id="mainMap" style="width: 100%; height: 600px;"></div>
+
+              </div>
+		    </div>
+			
+			<div class="col-4 grid-margin">
+			  <div class="card">
+				  
+				  <div class="card-body" style="-webkit-tap-highlight-color: transparent; user-select: none;">
+				  <div style="position: relative; width: 820px; height: 520px; padding: 0px; margin: 0px; border-width: 0px;">
+					  <h3>购买颜色词云</h3>
+					  <br>
+					  <br>
+					  <br>
+					  <br>
+					  <img src="/static/output/颜色_词云图.jpg" height="65%">
+				  </div>
+				  </div>
+			
+			
+			  </div>
+			</div>
+			
+		  </div>
+		<div class="row">
+			<div class="col-4 grid-margin">
+			  <div class="card">
+				  
+				  <div class="card-body" style="-webkit-tap-highlight-color: transparent; user-select: none;">
+				  <div style="position: relative; width: 820px; height: 520px; padding: 0px; margin: 0px; border-width: 0px;">
+					  <h3>优惠词云</h3>
+					  <img src="/static/output/优惠_词云图.jpg" height="65%">
+				  </div>
+				  </div>
+			  </div>
+			</div>
+			
+			<div class="col-8 grid-margin">
+			  <div class="card">
+			   <div id="mainOne" style="width: 100%; height: 600px;"></div>
+			
+			  </div>
+			</div>
+			
+		</div>
+        
+	</div>
+{% endblock %}
+
+{% block js %}
+<script>
+	var chartDom = document.getElementById('mainMap');
+	var myChart = echarts.init(chartDom);
+	var option;
+
+	option = {
+		title: {
+				text: 'IP评论数',
+				left:'center',
+				textStyle:{
+					color:'#333',
+					fontWeight:"bold"
+				}
+			  },
+		visualMap:{
+			show:true
+		},
+		tooltip: {
+			trigger: 'item',
+				formatter:function(params){
+					return params.name + '<br>评论数:'+ params.value + '条'
+			}
+		  },
+		visualMap:{
+		                min:0,
+		                max:2012,
+		                text:['高','低'],
+		                realtime:true,
+		                calculable:true,
+		                inrange:{
+		                    color:['#e0ffff','#008c8c']
+		                }
+		              },
+	  series: [
+		{
+		name: 'Rainfall',
+		  type: 'map',
+		  map:"china",
+		  label:{
+			  show:true,
+			  color:'#000',
+			  fontSize:12
+			},
+			emphasis:{
+					label:{
+						show:true
+					}
+				  },
+	  data:{{ num_conm_a | safe }},
+						 
+					  
+		 }
+	  ]
+	};
+
+	option && myChart.setOption(option);
+	
+</script>
+
+ 
+ <script>
+	 var chartDom = document.getElementById('mainOne');
+	 var myChart = echarts.init(chartDom);
+	 var option;
+	 
+	 option = {
+		 title:{
+			text:"优惠最多的词云" 
+		 },
+		 tooltip: {
+		 	trigger: 'item',
+		 		formatter:function(params){
+		 			return params.name + '<br>权重:'+ params.value
+		 	}
+		   },
+	   xAxis: {
+	     type: 'category',
+	     data: {{ bar_data['index_name'] | safe }}
+	   },
+	   yAxis: {
+	     type: 'value'
+	   },
+	   series: [
+	     {
+	       data: {{ bar_data['index_values'] | safe }},
+	       type: 'bar',
+	       showBackground: true,
+	       backgroundStyle: {
+	         color: 'rgba(180, 180, 180, 0.2)'
+	       }
+	     }
+	   ]
+	 };
+	 
+	 option && myChart.setOption(option);
+
+ </script>
+{% endblock %}

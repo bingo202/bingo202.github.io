@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block name_1 %}
+	<p class="mb-1 text-black">{{ username }}</p>
+{% endblock %}
+
+{% block name_2 %}
+    <span class="font-weight-bold mb-4">{{ username }}</span>       
+{% endblock %}
+
+{% block content %}
+      <div class="content-wrapper">
+        <div class="page-header">
+          <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white mr-2">
+              <i class="mdi mdi-home"></i>                 
+            </span>
+            全部服装信息
+          </h3>
+		  </div>
+		  
+		  <div class="row">
+		    <div class="col-12 grid-margin">
+		      <div class="card">
+		        <div class="card-body">
+		          <h3 class="card-title">所有的商品信息</h3>
+		          <div class="table-responsive">
+		            <table class="table">
+		              <thead>
+		                <tr>
+		                  <th>
+		                    商品名
+		                  </th>
+		                  <th>
+		                    店铺名
+		                  </th>
+		                  <th>
+		                    价格
+		                  </th>
+		                  <th>
+		                    好评数
+		                  </th>
+		                  <th>
+		                    中评数
+		                  </th>
+						  <th>
+						    差评
+						  </th>
+		  				<th>
+		  				  好评率
+		  				</th>
+		                </tr>
+		              </thead>
+		              <tbody>
+		  				{% for obj in data %}
+		                <tr>
+		                  <td>
+		                    <img src="{{ obj.img_url }}" class="mr-2" alt="image">
+		                    {{ obj.sp_name }}
+		                  </td>
+		                  <td>
+		                    {{ obj.shop_name }}
+		                  </td>
+		                  <td>
+		                    <label class="badge badge-gradient-success">￥{{ obj.price }}</label>
+		                  </td>
+		                  <td>
+		                    {{ obj.haoping }}
+		                  </td>
+		                  <td>
+		                    {{ obj.zhongping }}
+		                  </td>
+						  <td>
+						    {{ obj.chaping }}
+						  </td>
+		  				<td>{{ obj.haoping_lv}}</td>
+		                </tr>
+		  			  {% endfor %}
+		              </tbody>
+		            </table>
+					{{ pagination.links }}
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+
+        
+	</div>
+{% endblock %}

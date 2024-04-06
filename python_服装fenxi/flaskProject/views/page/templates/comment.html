@@ -1,0 +1,212 @@
+{% extends 'layout.html' %}
+
+{% block name_1 %}
+	<p class="mb-1 text-black">{{ username }}</p>
+{% endblock %}
+
+{% block name_2 %}
+    <span class="font-weight-bold mb-4">{{ username }}</span>       
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+	<div class="page-header">
+	  <h3 class="page-title">
+		<span class="page-title-icon bg-gradient-primary text-white mr-2">
+		  <i class="mdi mdi-home"></i>                 
+		</span>
+		评论分析
+	  </h3>
+	</div>
+	<div class="row">
+		<div class="col-md-6 grid-margin stretch-card">
+			<div class="card">
+			  <div class="card-body" id="mainOne" _echarts_instance_="ec_1711958194913" style="-webkit-tap-highlight-color: transparent; user-select: none;"><div style="position: relative; width: 820px; height: 520px; padding: 0px; margin: 0px; border-width: 0px;"><canvas data-zr-dom-id="zr_0" width="820" height="520" style="position: absolute; left: 0px; top: 0px; width: 820px; height: 520px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas></div></div>
+			  
+			  
+			</div>
+		  </div>
+		  
+		  <div class="col-md-6 grid-margin stretch-card">
+		  	<div class="card">
+		  	  <div class="card-body" id="mainTwo" _echarts_instance_="ec_1711958194913" style="-webkit-tap-highlight-color: transparent; user-select: none;">
+				  <div style="position: relative; width: 820px; height: 520px; padding: 0px; margin: 0px; border-width: 0px;"><canvas data-zr-dom-id="zr_0" width="820" height="520" style="position: absolute; left: 0px; top: 0px; width: 820px; height: 520px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas></div></div>
+			  
+			  
+		  	</div>
+		</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-12 grid-margin">
+			  <div class="card">
+				<div id="mainT" style="width: 100%; height: 500px;"></div>
+			  </div>
+			</div>
+		</div>
+		
+	</div>
+		  
+{% endblock %}
+
+
+{% block js %}
+<script>
+	var chartDom = document.getElementById('mainOne');
+	var myChart = echarts.init(chartDom);
+	var option;
+	
+	option = {
+	  title: {
+	    text: '服饰类型评分'
+	  },
+	  legend: {
+	    data: ['1星', '2星','3星', '4星','5星']
+	  },
+	  radar: {
+	    indicator: [
+	      { name: 'T恤', max: 900 },
+	      { name: '上衣', max: 900 },
+	      { name: '外套', max: 900 },
+	      { name: '毛衣', max: 900 },
+	      { name: '泳装', max: 900 },
+	      { name: '牛仔装', max: 900 },
+		  { name: '裤子', max: 900 },
+		  { name: '西装', max: 900 },
+		  { name: '运动装', max: 900 },
+		  { name: '连衣裙', max: 900 },
+	    ]
+	  },
+	  series: [
+	    {
+	      name: 'Budget vs spending',
+	      type: 'radar',
+	      data: [
+	        {
+	          value: {{ value_start[0] | safe }},
+	          name: '1星'
+	        },
+	        {
+	          value: {{ value_start[1] | safe }},
+	          name: '2星'
+	        },
+			{
+			  value: {{ value_start[2] | safe }},
+			  name: '3星'
+			},
+			{
+			  value: {{ value_start[3] | safe }},
+			  name: '4星'
+			},
+			{
+			  value: {{ value_start[4] | safe }},
+			  name: '5星'
+			},
+	      ]
+	    }
+	  ]
+	};
+	option && myChart.setOption(option);
+</script>
+
+<script>
+	var chartDom = document.getElementById('mainTwo');
+	var myChart = echarts.init(chartDom);
+	var option;
+
+	option = {
+	title: {
+	text: '好评分布'
+	},
+	tooltip: {
+	trigger: 'item',
+	formatter: '{a} <br/>{b} : {c}'
+	},
+
+	legend: {
+	data: ['T恤', '上衣', '外套', '毛衣', '泳装', '牛仔装', '裤子', '西装', '运动装', '连衣裙'],
+	bottom: 0,
+	},
+	series: [
+	{
+	  name: '5星',
+	  type: 'funnel',
+	  left: '10%',
+	  width: '80%',
+	  labelLine: {
+		show: false
+	  },
+	  itemStyle: {
+		opacity: 0.7
+	  },
+	  emphasis: {
+		label: {
+		  position: 'inside',
+		  formatter: '{b}: {c}'
+		}
+	  },
+	  data: {{ data_g_start[1] | safe}},
+	},
+	{
+	  name: '4星',
+	  type: 'funnel',
+	  left: '10%',
+	  width: '80%',
+	  maxSize: '80%',
+	  label: {
+		position: 'inside',
+		formatter: '{c}',
+		color: '#fff'
+	  },
+	  itemStyle: {
+		opacity: 0.5,
+		borderColor: '#fff',
+		borderWidth: 2
+	  },
+	  emphasis: {
+		label: {
+		  position: 'inside',
+		  formatter: '{b}: {c}'
+		}
+	  },
+	  data: {{ data_g_start[0] | safe}},
+	  z: 100
+	}
+	]
+	};
+
+	option && myChart.setOption(option);
+</script>
+
+<script>
+	var chartDom = document.getElementById('mainT');
+	var myChart = echarts.init(chartDom);
+	var option;
+
+	option = {
+		title:{
+			text:'评论数量'
+		},
+		tooltip: {
+		trigger: 'item',
+		formatter: '{a} <br/>{b} : {c}'
+		},
+	  xAxis: {
+		type: 'category',
+		data: {{ num_data['a'] | safe }}
+	  },
+	  yAxis: {
+		type: 'value'
+	  },
+	  series: [
+		{
+		  data: {{ num_data['b'] | safe }},
+		  type: 'line',
+		  smooth: true
+		}
+	  ]
+	};
+
+	option && myChart.setOption(option);
+</script>
+{% endblock %}

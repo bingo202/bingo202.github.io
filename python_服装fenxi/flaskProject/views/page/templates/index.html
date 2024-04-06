@@ -1,0 +1,223 @@
+{% extends 'layout.html' %}
+
+{% block name_1 %}
+	<p class="mb-1 text-black">{{ username }}</p>
+{% endblock %}
+
+{% block name_2 %}
+    <span class="font-weight-bold mb-4">{{ username }}</span>       
+{% endblock %}
+
+                
+{% block content %}
+      <div class="content-wrapper">
+        <div class="page-header">
+          <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white mr-2">
+              <i class="mdi mdi-home"></i>                 
+            </span>
+            首页
+          </h3>
+
+        </div>
+        <div class="row">
+          <div class="col-md-4 stretch-card grid-margin">
+            <div class="card bg-gradient-danger card-img-holder text-white">
+              <div class="card-body">
+                <img src="../../../static/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>
+                <h4 class="font-weight-normal mb-3">评论数量
+                  <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+                </h4>
+                <h2 class="mb-5">{{ num_dict.comment_num }}</h2>
+                <h6 class="card-text">每个服装商品的用户评价数量</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 stretch-card grid-margin">
+            <div class="card bg-gradient-info card-img-holder text-white">
+              <div class="card-body">
+                <img src="../../../static/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>                  
+                <h4 class="font-weight-normal mb-3">全网平均好评率
+                  <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                </h4>
+                <h2 class="mb-5">{{ num_dict.haoping_lv }}</h2>
+                <h6 class="card-text">对采集的好评数据进行平均处理</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 stretch-card grid-margin">
+            <div class="card bg-gradient-success card-img-holder text-white">
+              <div class="card-body">
+                <img src="../../../static/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image"/>                                    
+                <h4 class="font-weight-normal mb-3">热销商家数量
+                  <i class="mdi mdi-diamond mdi-24px float-right"></i>
+                </h4>
+                <h2 class="mb-5">{{ num_dict.shop_num }}</h2>
+                <h6 class="card-text">销售数量较为热门的商家数量</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-7 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body" id="mainOne">
+                
+                 
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body" id="mainTwo" style="width: 100%;height: 600px;">
+				                                                      
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 grid-margin">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title">好评数最高的前7个商品</h3>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>
+                          商品名
+                        </th>
+                        <th>
+                          店铺名
+                        </th>
+                        <th>
+                          价格
+                        </th>
+                        <th>
+                          好评数
+                        </th>
+                        <th>
+                          评论数
+                        </th>
+						<th>
+						  好评率
+						</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+						{% for obj in dict_shop_sp %}
+                      <tr>
+                        <td>
+                          <img src="{{ obj.img_url }}" class="mr-2" alt="image">
+                          {{ obj.sp_name }}
+                        </td>
+                        <td>
+                          {{ obj.sp_shop }}
+                        </td>
+                        <td>
+                          <label class="badge badge-gradient-success">￥{{ obj.price }}</label>
+                        </td>
+                        <td>
+                          {{ obj.haoping }}
+                        </td>
+                        <td>
+                          {{ obj.comment_num }}
+                        </td>
+						<td>{{ obj.haoping_lv}}</td>
+                      </tr>
+					  {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+		
+	  </div>
+{% endblock %}
+
+{% block js %}
+<script>
+	var chartDom = document.getElementById('mainOne');
+	var myChart = echarts.init(chartDom);
+	var option;
+	
+	option = {
+		title:{
+			show:true,
+			text:"评论时间柱状图",
+		},
+		
+	  xAxis: {
+	    type: 'category',
+	    data: {{ bar_info.index_year | safe }}
+	  },
+	  yAxis: {
+	    type: 'value'
+	  },
+	  series: [
+	    {
+	      data: {{ bar_info.value_list | safe }},
+	      type: 'bar',
+		  emphasis: {
+		    label: {
+		      show: true,
+		      fontSize: 30,
+		      fontWeight: 'bold',
+		  			  
+		    }
+		  },
+	    }
+	  ]
+	};
+	
+	option && myChart.setOption(option);
+</script>
+
+<script>
+	var chartDom = document.getElementById('mainTwo');
+	var myChart = echarts.init(chartDom);
+	var option;
+	
+	option = {
+		title:{
+			text:'省份评论数量'
+		},
+	  tooltip: {
+	    trigger: 'item'
+	  },
+	  legend: {
+	    top: '5%',
+	    left: 'center'
+	  },
+	  series: [
+	    {
+	      name: '评论数量',
+	      type: 'pie',
+	      radius: ['40%', '70%'],
+	      avoidLabelOverlap: false,
+	      label: {
+	        show: false,
+	        position: 'left'
+	      },
+	      emphasis: {
+	        label: {
+	          show: true,
+	          fontSize: 30,
+	          fontWeight: 'bold',
+			  
+	        }
+	      },
+	      labelLine: {
+	        show: false
+	      },
+	      data: {{ num_conm_a | safe }}
+	    }
+	  ]
+	};
+	
+	option && myChart.setOption(option);
+</script>
+{% endblock %}

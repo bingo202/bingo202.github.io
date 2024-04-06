@@ -1,0 +1,157 @@
+{% extends 'layout.html' %}
+
+{% block name_1 %}
+	<p class="mb-1 text-black">{{ username }}</p>
+{% endblock %}
+
+{% block name_2 %}
+    <span class="font-weight-bold mb-4">{{ username }}</span>       
+{% endblock %}
+
+{% block content %}
+      <div class="content-wrapper">
+        <div class="page-header">
+          <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white mr-2">
+              <i class="mdi mdi-home"></i>
+            </span>
+            服装分类情感分析
+          </h3>
+		  <h1 class="card-title text-info display-1">{{ keyword }}</h1>
+		  
+		  <form class="pt-3" action="/page/qinggan/search" method="POST">
+		  	  <div class="form-group" >
+		  		<select class="form-control form-control-lg" name="tyle_search" id="tyle_search" style="width: 100%;">
+		  			{% for i in  type_list %}
+		  		  <option>{{ i }}</option>
+		  			{% endfor %}
+		  		</select>
+		  		<div class="mt-3">
+		  		<button class="btn btn-block btn-gradient-danger btn-lg font-weight-medium auth-form-btn" type="submit"> 确定</button>
+		  		</div>
+		  	  </div>
+		  </form>
+		  </div>
+		  
+		<div class="row">
+			<div class="col-md-6 grid-margin stretch-card">
+				<div class="card">
+				  <div class="card-body" style="-webkit-tap-highlight-color: transparent; user-select: none;">
+					  <div style="position: relative; width: 820px; height: 520px; padding: 0px; margin: 0px; border-width: 0px;">
+						  <h3>{{ keyword }}评论词云</h3>
+						  <img src="/static/output/all_data/评论_词云图.jpg" height="90%">
+					  </div>
+					  </div>
+				</div>
+			  </div>
+			  
+			  <div class="col-md-6 grid-margin stretch-card">
+			  	<div class="card">
+			  	  <div class="card-body" id="mainOne" _echarts_instance_="ec_1711958194913" style="-webkit-tap-highlight-color: transparent; user-select: none;">
+					  <div style="position: relative; width: 820px; height: 520px; padding: 0px; margin: 0px; border-width: 0px;">
+
+					  </div></div>
+			  	</div>
+			    </div>
+		</div>
+	
+		<div class="row">
+			<div class="col-md-5 grid-margin stretch-card">
+				<div class="card">
+				  <div class="card-body" style="-webkit-tap-highlight-color: transparent; user-select: none;">
+					  <div style="position: relative; width: 820px; height: 520px; padding: 0px; margin: 0px; border-width: 0px;">
+						  <h3>所有评论词云</h3>
+						  <img src="/static/output/all_data/模型精准率与召回率.jpg" height="80%">
+					  </div>
+					  </div>
+				</div>
+			  </div>
+			  
+			  <div class="col-md-7 grid-margin stretch-card">
+			  	<div class="card">
+			  	  <div class="card-body" _echarts_instance_="ec_1711958194913" style="-webkit-tap-highlight-color: transparent; user-select: none;">
+					  <div style="position: relative; width: 820px; height: 520px; padding: 0px; margin: 0px; border-width: 0px;">
+						<h3>所有评论词云</h3>
+						<img src="/static/output/all_data/评论_情感分布占比图.png" height="100%">
+					  </div></div>
+					</div>
+			    </div>
+		</div>
+		
+		<div class="row">
+			<<div class="col-12 grid-margin">
+		      <div class="card">
+		        <div class="card-body">
+		          <h3 class="card-title">所有的商品信息</h3>
+		          <div class="table-responsive">
+		            <table class="table">
+		              <thead>
+		                <tr>
+		                  <th>用户评论</th>
+						  <th>星级</th>
+						  <th>情感得分</th>
+						  <th>分析结果</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for obj in data_subset %}
+					  <tr>
+						  <td>{{ obj['user_start'] }}</td>
+						  <td>{{ obj['conent'] }}</td>
+						  <td>{{ obj['情感得分'] }}</td>
+						  <td>{{ obj['分析结果'] }}</td>
+					</tr>
+					{% endfor %}
+					</tbody>
+					</table>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+<script>
+	var chartDom = document.getElementById('mainOne');
+	var myChart = echarts.init(chartDom);
+	var option;
+	
+	option = {
+	  legend: {
+	    top: 'bottom'
+	  },
+	  toolbox: {
+	    show: true,
+	    feature: {
+	      mark: { show: true },
+	      dataView: { show: true, readOnly: false },
+	      restore: { show: true },
+	      saveAsImage: { show: true }
+	    }
+	  },
+	  series: [
+	    {
+	      name: 'TOP10高频词',
+	      type: 'pie',
+	      radius: [50, 250],
+	      center: ['50%', '50%'],
+	      roseType: 'area',
+	      itemStyle: {
+	        borderRadius: 8
+	      },
+		  emphasis: {
+		    label: {
+		      show: true,
+		      fontSize: 30,
+		      fontWeight: 'bold',
+		  			  
+		    }
+		  },
+	      data: {{ value_index | safe }},
+	    }
+	  ]
+	};
+	
+	option && myChart.setOption(option);
+</script>
+
+
+{% endblock %}

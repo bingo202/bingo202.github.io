@@ -1,0 +1,472 @@
+{% extends 'layout.html' %}
+
+{% block name_1 %}
+	<p class="mb-1 text-black">{{ username }}</p>
+{% endblock %}
+
+{% block name_2 %}
+    <span class="font-weight-bold mb-4">{{ username }}</span>       
+{% endblock %}
+
+{% block content %}
+      <div class="content-wrapper">
+        <div class="page-header">
+          <h3 class="page-title">
+            <span class="page-title-icon bg-gradient-primary text-white mr-2">
+              <i class="mdi mdi-home"></i>                 
+            </span>
+            店铺分析
+          </h3>
+		  </div>
+		  
+		  <div class="row">
+		    <div class="col-12 grid-margin">
+		      <div class="card">
+				<div id="mainOne" style="width: 100%; height: 600px;"></div>
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <div class="row">
+		    <div class="col-6 grid-margin">
+		      <div class="card">
+		  		<div id="mainTwo" style="width: 100%; height: 600px;"></div>
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <div class="row">
+		    <div class="col-3 grid-margin">
+		      <div class="card">
+		  		<div id="mainpre1" style="width: 100%; height: 600px;"></div>
+		      </div>
+		    </div>
+			
+			<div class="col-3 grid-margin">
+			  <div class="card">
+				<div id="mainpre2" style="width: 100%; height: 600px;"></div>
+			  </div>
+			</div>
+			
+			<div class="col-3 grid-margin">
+			  <div class="card">
+				<div id="mainpre3" style="width: 100%; height: 600px;"></div>
+			  </div>
+			</div>
+			
+			<div class="col-3 grid-margin">
+			  <div class="card">
+				<div id="mainpre4" style="width: 100%; height: 600px;"></div>
+			  </div>
+			</div>
+		  </div>
+
+        
+	</div>
+{% endblock %}
+
+{% block js %}
+<script>
+	var app = {};
+	
+	var chartDom = document.getElementById('mainOne');
+	var myChart = echarts.init(chartDom);
+	var option;
+	
+	const posList = [
+	  'left',
+	  'right',
+	  'top',
+	  'bottom',
+	  'inside',
+	  'insideTop',
+	  'insideLeft',
+	  'insideRight',
+	  'insideBottom',
+	  'insideTopLeft',
+	  'insideTopRight',
+	  'insideBottomLeft',
+	  'insideBottomRight'
+	];
+	app.configParameters = {
+	  rotate: {
+	    min: -90,
+	    max: 90
+	  },
+	  align: {
+	    options: {
+	      left: 'left',
+	      center: 'center',
+	      right: 'right'
+	    }
+	  },
+	  verticalAlign: {
+	    options: {
+	      top: 'top',
+	      middle: 'middle',
+	      bottom: 'bottom'
+	    }
+	  },
+	  position: {
+	    options: posList.reduce(function (map, pos) {
+	      map[pos] = pos;
+	      return map;
+	    }, {})
+	  },
+	  distance: {
+	    min: 0,
+	    max: 100
+	  }
+	};
+	app.config = {
+	  rotate: 90,
+	  align: 'left',
+	  verticalAlign: 'middle',
+	  position: 'insideBottom',
+	  distance: 15,
+	  onChange: function () {
+	    const labelOption = {
+	      rotate: app.config.rotate,
+	      align: app.config.align,
+	      verticalAlign: app.config.verticalAlign,
+	      position: app.config.position,
+	      distance: app.config.distance
+	    };
+	    myChart.setOption({
+	      series: [
+	        {
+	          label: labelOption
+	        },
+	        {
+	          label: labelOption
+	        },
+	        {
+	          label: labelOption
+	        },
+	        {
+	          label: labelOption
+	        }
+	      ]
+	    });
+	  }
+	};
+	const labelOption = {
+	  show: true,
+	  position: app.config.position,
+	  distance: app.config.distance,
+	  align: app.config.align,
+	  verticalAlign: app.config.verticalAlign,
+	  rotate: app.config.rotate,
+	  formatter: '{c}  {name|{a}}',
+	  fontSize: 16,
+	  rich: {
+	    name: {}
+	  }
+	};
+	option = {
+		title:{
+			text:"评价最高商铺各属性柱状图"
+		},
+	  tooltip: {
+	    trigger: 'axis',
+	    axisPointer: {
+	      type: 'shadow'
+	    }
+	  },
+	  legend: {
+	    data: ['商品', '物流', '售后']
+	  },
+	  toolbox: {
+	    show: true,
+	    orient: 'vertical',
+	    left: 'right',
+	    top: 'center',
+	    feature: {
+	      mark: { show: true },
+	      dataView: { show: true, readOnly: false },
+	      magicType: { show: true, type: ['line', 'bar', 'stack'] },
+	      restore: { show: true },
+	      saveAsImage: { show: true }
+	    }
+	  },
+	  xAxis: [
+	    {
+	      type: 'category',
+	      axisTick: { show: false },
+	      data: {{ bar_data['shop_name'] | safe}}
+	    }
+	  ],
+	  yAxis: [
+	    {
+			min:3,
+			max:5,
+	      type: 'value'
+	    }
+	  ],
+	  series: [
+	    {
+	      name: '商品',
+	      type: 'bar',
+	      barGap: 0,
+	      label: labelOption,
+	      emphasis: {
+	        focus: 'series'
+	      },
+	      data: {{ bar_data['shop_start'] | safe}}
+	    },
+	    {
+	      name: '物流',
+	      type: 'bar',
+	      label: labelOption,
+	      emphasis: {
+	        focus: 'series'
+	      },
+	      data: {{ bar_data['wuliu_price'] | safe}}
+	    },
+	    {
+	      name: '售后',
+	      type: 'bar',
+	      label: labelOption,
+	      emphasis: {
+	        focus: 'series'
+	      },
+	      data: {{ bar_data['shouhou_price'] | safe}}
+	    }
+	    
+	  ]
+	};
+	
+	option && myChart.setOption(option);
+
+
+</script>
+
+<script>
+	var chart = echarts.init(document.getElementById('mainTwo'));
+
+	var option = {
+		title:{
+			text:"商品店铺评分与各属性评价"
+		},
+		legend: {
+		    data: ['商品评价', '物流评价', '售后评价']
+		  },
+	  xAxis: {
+		type: 'value',
+		min: 3.5,
+		max: 5
+	  },
+	  yAxis: {
+		type: 'value',
+		min: 3,
+		max: 5
+	  },
+	  series: [
+		{
+		  name: '商品评价',
+		  type: 'scatter',
+		  data: {{ data_dict['shop_level'] | safe }},
+		  itemStyle: {
+			color: 'red'
+		  }
+		},
+		{
+		  name: '物流评价',
+		  type: 'scatter',
+		  data: {{ data_dict['wuliu_level'] | safe }},
+		  itemStyle: {
+			color: 'green'
+		  }
+		},
+		{
+		  name: '售后评价',
+		  type: 'scatter',
+		  data: {{ data_dict['shouhou_level'] | safe }},
+		  itemStyle: {
+			color: 'blue'
+		  }
+		}
+	  ]
+	};
+
+	chart.setOption(option);
+</script>
+
+<script>
+	var chartDom = document.getElementById('mainpre1');
+	var myChart = echarts.init(chartDom);
+	var option;
+	
+	option = {
+		title:{
+			text:'商铺评分',
+			x:'center',
+			y:50,
+			textStyle: {
+			    fontSize: 40,
+			  },
+		},
+	  tooltip: {
+	    trigger: 'item'
+	  },
+	  series: [
+	    {
+	      name: 'Access From',
+	      type: 'pie',
+	      radius: ['40%', '70%'],
+	      avoidLabelOverlap: false,
+	      label: {
+	        show: false,
+	        position: 'center'
+	      },
+	      emphasis: {
+	        label: {
+	          show: true,
+	          fontSize: 40,
+	          fontWeight: 'bold'
+	        }
+	      },
+	      labelLine: {
+	        show: false
+	      },
+	      data: {{ pre_dict['shop_list'] | safe }}
+	    }
+	  ]
+	};
+	
+	option && myChart.setOption(option);
+
+</script>
+
+<script>
+	var chartDom = document.getElementById('mainpre2');
+	var myChart = echarts.init(chartDom);
+	var option;
+	option = {
+		title:{
+			text:'商品评分',
+			x:'center',
+			y:50,
+			textStyle: {
+			    fontSize: 40,
+			  },
+		},
+	  tooltip: {
+		trigger: 'item'
+	  },
+	  series: [
+		{
+		  name: 'Access From',
+		  type: 'pie',
+		  radius: ['40%', '70%'],
+		  avoidLabelOverlap: false,
+		  label: {
+			show: false,
+			position: 'center'
+		  },
+		  emphasis: {
+			label: {
+			  show: true,
+			  fontSize: 40,
+			  fontWeight: 'bold'
+			}
+		  },
+		  labelLine: {
+			show: false
+		  },
+		  data: {{ pre_dict['shop_d_list'] | safe }}
+		}
+	  ]
+	};
+
+	option && myChart.setOption(option);
+</script>
+
+<script>
+	var chartDom = document.getElementById('mainpre3');
+	var myChart = echarts.init(chartDom);
+	var option;
+	option = {
+		title:{
+			text:'物流评分',
+			x:'center',
+			y:50,
+			textStyle: {
+			    fontSize: 40,
+			  },
+		},
+	  tooltip: {
+		trigger: 'item'
+	  },
+	  series: [
+		{
+		  name: 'Access From',
+		  type: 'pie',
+		  radius: ['40%', '70%'],
+		  avoidLabelOverlap: false,
+		  label: {
+			show: false,
+			position: 'center'
+		  },
+		  emphasis: {
+			label: {
+			  show: true,
+			  fontSize: 40,
+			  fontWeight: 'bold'
+			}
+		  },
+		  labelLine: {
+			show: false
+		  },
+		  data: {{ pre_dict['wuliu_list'] | safe }}
+		}
+	  ]
+	};
+
+	option && myChart.setOption(option);
+</script>
+
+<script>
+	var chartDom = document.getElementById('mainpre4');
+	var myChart = echarts.init(chartDom);
+	var option;
+	option = {
+		title:{
+			text:'售后评分',
+			x:'center',
+			y:50,
+			textStyle: {
+			    fontSize: 40,
+			  },
+		},
+	  tooltip: {
+		trigger: 'item'
+	  },
+	  series: [
+		{
+		  name: 'Access From',
+		  type: 'pie',
+		  radius: ['40%', '70%'],
+		  avoidLabelOverlap: false,
+		  label: {
+			show: false,
+			position: 'center'
+		  },
+		  emphasis: {
+			label: {
+			  show: true,
+			  fontSize: 40,
+			  fontWeight: 'bold'
+			}
+		  },
+		  labelLine: {
+			show: false
+		  },
+		  data: {{ pre_dict['shouhou_list'] | safe }}
+		}
+	  ]
+	};
+
+	option && myChart.setOption(option);
+</script>
+{% endblock %}
